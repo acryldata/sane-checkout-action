@@ -11,4 +11,6 @@ runs:
         # See https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
         # and https://github.com/actions/checkout/pull/1396
         fetch-depth: 800 # we likely won't have 800 commits between releases
-        fetch-tags: true
+        # Due to https://github.com/actions/checkout/issues/1467,
+        # tags will get fetched automatically on tag events.
+        fetch-tags: ${{ github.event_name != 'release' }}
