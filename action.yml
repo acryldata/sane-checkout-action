@@ -14,3 +14,4 @@ runs:
         # Due to https://github.com/actions/checkout/issues/1467,
         # tags will get fetched automatically on tag events.
         fetch-tags: ${{ github.event_name != 'release' }}
+        ref: ${{ github.event.pull_request.head.sha }}
