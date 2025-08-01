@@ -1,18 +1,17 @@
 name: "Checkout"
 description: "Checkout limited git history to speed up CI"
-
+inputs:
+  checkout-head-only:
+    description: "For PRs, checkout only the head SHA without merge commit"
+    required: false
+    default: 'true'
 runs:
   using: "composite"
   steps:
     - name: Check out the repo
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # https://github.com/actions/checkout/issues/1471 -> Fetch depth 0 required to actually get tags without using merge to head due to limited support of tag fetching
-        # See https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
-        # and https://github.com/actions/checkout/pull/1396 
+        fetch-depth: 0
         filter: tree:0
-        # Due to https://github.com/actions/checkout/issues/1467,
-        # tags will get fetched automatically on tag events.
         fetch-tags: ${{ github.event_name != 'release' }}
-        # Prevents pulling merged changes from main head
-        ref: ${{ github.event.pull_request.head.sha }}
+        ref: ${{ (github.event_name == 'pull_request' && inputs.checkout-head-only == 'true') && github.event.pull_request.head.sha || '' }}
