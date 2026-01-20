@@ -5,6 +5,10 @@ inputs:
     description: "For PRs, checkout only the head SHA without merge commit"
     required: false
     default: 'true'
+  ref:
+    description: "The branch, tag or SHA to checkout. If not specified, uses default behavior."
+    required: false
+    default: ''
 runs:
   using: "composite"
   steps:
@@ -19,4 +23,5 @@ runs:
         # tags will get fetched automatically on tag events.
         fetch-tags: ${{ github.event_name != 'release' }}
         # Prevents pulling merged changes from main head when checkout-head-only is true
-        ref: ${{ (github.event_name == 'pull_request' && inputs.checkout-head-only == 'true') && github.event.pull_request.head.sha || '' }}
+        # If a custom ref is provided, use it; otherwise use the default PR head logic
+        ref: ${{ (inputs.ref != '' && inputs.ref) || ((github.event_name == 'pull_request' && inputs.checkout-head-only == 'true') && github.event.pull_request.head.sha || '') }}
