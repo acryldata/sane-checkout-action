@@ -4,7 +4,7 @@ inputs:
   checkout-head-only:
     description: "For PRs, checkout only the head SHA without merge commit"
     required: false
-    default: 'true'
+    default: 'false'
   ref:
     description: "The branch, tag or SHA to checkout. If not specified, uses default behavior."
     required: false
