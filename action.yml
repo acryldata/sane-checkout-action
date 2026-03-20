@@ -4,7 +4,7 @@ inputs:
   checkout-head-only:
     description: "For PRs, checkout only the head SHA without merge commit"
     required: false
-    default: 'true'
+    default: 'false'
   ref:
     description: "The branch, tag or SHA to checkout. If not specified, uses default behavior."
     required: false
@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out the repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0 # https://github.com/actions/checkout/issues/1471 -> Fetch depth 0 required to actually get tags without using merge to head due to limited support of tag fetching
         # See https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
